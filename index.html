@@ -69,14 +69,38 @@
     </center>
 
     <br>
+	<center>
+Aperte F9 pra fazer o download do backup
+</center>
     <br>
 
+<footer>
 
+</footer>
 </body>
 
 <script>
 
 
+
+//---Aperta F9 pra baixar os localStorages----------------------------------------------------
+document.addEventListener("keydown", function (e) {
+        if (e.key === "F9") {
+            var conteudo = "";
+for (let i = 0; i < localStorage.length; i++) {
+    const chave = localStorage.key(i);
+    const valor = localStorage.getItem(chave);
+	conteudo += `localStorage.setItem('${chave}','${valor}');`   
+} const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" }); 
+            const url = URL.createObjectURL(blob); 
+            const a = document.createElement("a"); 
+            a.href = url;
+            a.download = "localStorages.txt"; 
+            a.click(); 
+            URL.revokeObjectURL(url);
+        }
+    });
+//-------------------------------------------------------
 
 
 
