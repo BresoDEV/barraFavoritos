@@ -73,7 +73,7 @@
     </center>
 
     <br>
-   
+
     <br>
 
     <footer>
@@ -86,23 +86,25 @@
 
 
     //---Aperta F9 pra baixar os localStorages----------------------------------------------------
-    document.getElementById('Backup').addEventListener("click", function () {
-        var conteudo = "";
-            for (let i = 0; i < localStorage.length; i++) {
-                const chave = localStorage.key(i);
-                const valor = localStorage.getItem(chave);
 
-                if(chave.includes('barra_favoritos_'))
-                {
-                    conteudo += `localStorage.setItem('${chave}','${valor}');`
-                } 
-            } const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "localStorages.txt";
-            a.click();
-            URL.revokeObjectURL(url);
+     
+    document.getElementById('Backup').addEventListener("click", () =>{
+        var conteudo = "";
+        for (let i = 0; i < localStorage.length; i++) {
+            const chave = localStorage.key(i);
+            const valor = localStorage.getItem(chave);
+
+            if (chave.includes('barra_favoritos_')) {
+                conteudo += `localStorage.setItem('${chave}','${valor}');`
+            }
+        } 
+        const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "localStorages.txt";
+        a.click();
+        URL.revokeObjectURL(url);
     });
     //-------------------------------------------------------
 
