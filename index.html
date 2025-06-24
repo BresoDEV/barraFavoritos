@@ -68,12 +68,12 @@
         <input type="text" id="nome" placeholder="Nome (Ex: Google)" value="">
         <br>
         <button id="Salvar">Salvar</button>
+        <br>
+        <button id="Backup">Baixar Backup</button>
     </center>
 
     <br>
-    <center>
-        Aperte F9 pra fazer o download do backup
-    </center>
+   
     <br>
 
     <footer>
@@ -86,9 +86,8 @@
 
 
     //---Aperta F9 pra baixar os localStorages----------------------------------------------------
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "F9") {
-            var conteudo = "";
+    document.getElementById('Backup').addEventListener("click", function () {
+        var conteudo = "";
             for (let i = 0; i < localStorage.length; i++) {
                 const chave = localStorage.key(i);
                 const valor = localStorage.getItem(chave);
@@ -104,7 +103,6 @@
             a.download = "localStorages.txt";
             a.click();
             URL.revokeObjectURL(url);
-        }
     });
     //-------------------------------------------------------
 
