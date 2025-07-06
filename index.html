@@ -61,7 +61,7 @@
 
 <body>
 
-    <canvas id="meuCanvas" class="canvass"></canvas>
+    
     <br>
     <center>
         <input type="text" id="link" placeholder="Link (Ex: https://www.google.com)" value="">
@@ -69,16 +69,12 @@
         <br>
         <button id="Salvar">Salvar</button>
         <br>
-        <button id="Backup">Baixar Backup</button>
+        <button onclick="baixar()">Baixar Backup</button>
     </center>
 
     <br>
 
     <br>
-
-    <footer>
-
-    </footer>
 </body>
 
 <script>
@@ -87,9 +83,9 @@
 
     //---Aperta F9 pra baixar os localStorages----------------------------------------------------
 
-     
-    document.getElementById('Backup').addEventListener("click", () =>{
+    function baixar(){
         var conteudo = "";
+        console.log('bin')
         for (let i = 0; i < localStorage.length; i++) {
             const chave = localStorage.key(i);
             const valor = localStorage.getItem(chave);
@@ -97,6 +93,7 @@
             if (chave.includes('barra_favoritos_')) {
                 conteudo += `localStorage.setItem('${chave}','${valor}');`
             }
+            console.log(conteudo)
         } 
         const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
         const url = URL.createObjectURL(blob);
@@ -105,7 +102,9 @@
         a.download = "localStorages.txt";
         a.click();
         URL.revokeObjectURL(url);
-    });
+    }
+    
+   
     //-------------------------------------------------------
 
 
@@ -159,6 +158,7 @@
 
 
     document.getElementById('Salvar').addEventListener('click', () => {
+        
         if (document.getElementById('link').value !== '') {
             if (document.getElementById('nome').value !== '') {
                 for (let index = 0; index < 1000; index++) {
@@ -199,6 +199,6 @@
 
 
 </script>
-<script src="particulas.js"></script>
+
 
 </html>
