@@ -89,6 +89,11 @@
       font-size: 12px;
       display: block;
       word-break: break-word;
+	  
+	  white-space: nowrap;        /* Não quebra em linhas */
+  overflow: hidden;           /* Esconde o que ultrapassar */
+  text-overflow: ellipsis;    /* Mostra "..." no fim */
+  max-width: 80px;  
     }
 
     .delete-btn {
