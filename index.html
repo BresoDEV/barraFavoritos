@@ -89,8 +89,8 @@
       font-size: 12px;
       display: block;
       word-break: break-word;
-	  
-	  white-space: nowrap;        /* Não quebra em linhas */
+
+      white-space: nowrap;        /* Não quebra em linhas */
   overflow: hidden;           /* Esconde o que ultrapassar */
   text-overflow: ellipsis;    /* Mostra "..." no fim */
   max-width: 80px;  
@@ -115,6 +115,22 @@
     .delete-btn:hover {
       background: darkred;
     }
+
+    .custom-btn {
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.custom-btn:hover {
+  background-color: #16a085;
+}
+
   </style>
 </head>
 
@@ -124,11 +140,12 @@
     <div class="top-bar">
       <input type="text" id="linkInput" placeholder="https://exemplo.com"><br><br>
       <input type="text" id="nameInput" placeholder="Nome do site"><br><br>
-      <button onclick="adicionarFavorito()">+</button>
+      <button onclick="adicionarFavorito()">Adicionar</button>
     </div>
-  
+  <hr>
     <div style="margin-bottom: 10px;">
-      <button onclick="exportarFavoritos()">Exportar</button>
+      <button class="custom-btn" onclick="exportarFavoritos()">Exportar</button>
+
       <label style="cursor: pointer;">
         <span style="background-color: #1abc9c; padding: 6px 12px; border-radius: 5px;">Importar</span>
         <input type="file" accept=".json" onchange="importarFavoritos(event)" style="display: none;">
