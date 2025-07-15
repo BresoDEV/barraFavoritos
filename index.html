@@ -1,204 +1,239 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-</head>
-<style>
-    * {
-        text-decoration: none;
-        font-size: 25px;
-        margin: 0;
-        padding: 0;
-        color: aliceblue;
-    }
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu de Favoritos</title>
+  <style>
     body {
-        background-color: black;
-
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #2c3e50, #34495e);
+      color: white;
+     
+      
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      height: 100vh;
+      box-sizing: border-box;
     }
 
-    img {
-        width: 25px;
-        margin-top: 5px;
+    .top-bar {
+      
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
     }
 
-    p,
-    hr {
-        margin: 0;
-        margin-top: 10px;
+    .top-bar input {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
     }
 
-    button,
-    input {
-        background-color: transparent;
-        padding: 5px;
-        cursor: pointer;
-        font-size: medium;
-        min-width: 25%;
-        margin-top: 10px;
+    .top-bar button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1abc9c;
+      color: white;
+      cursor: pointer;
     }
 
-    button {
-        background-color: rgb(52, 105, 42);
+    .top-bar button:hover {
+      background-color: #16a085;
     }
 
-    a,
-    font {
-        cursor: pointer;
-        font-weight: bolder;
-        font-family: Arial, Helvetica, sans-serif;
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 70px);
+      gap: 20px;
+      padding: 20px;
+      background-color: #1c1c1c;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      max-width: 80%;
+      width: 80%;
+
+      overflow-y: auto;
+      justify-content: center;
+      /* Centraliza os blocos */
     }
 
-    table {
-        margin-left: 20px;
+
+    .menu-item {
+      background-color: #2c3e50;
+      border-radius: 15px;
+      padding: 10px;
+      text-align: center;
+      position: relative;
+      transition: 0.2s ease;
+      cursor: pointer;
     }
-</style>
+
+    .menu-item:hover {
+      background-color: #3e5871;
+    }
+
+    .menu-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+
+    .menu-item span {
+      font-size: 12px;
+      display: block;
+      word-break: break-word;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 16px;
+      padding: 0;
+    }
+
+    .delete-btn:hover {
+      background: darkred;
+    }
+  </style>
+</head>
 
 <body>
 
-    
-    <br>
-    <center>
-        <input type="text" id="link" placeholder="Link (Ex: https://www.google.com)" value="">
-        <input type="text" id="nome" placeholder="Nome (Ex: Google)" value="">
-        <br>
-        <button id="Salvar">Salvar</button>
-        <br>
-        <button onclick="baixar()">Baixar Backup</button>
-    </center>
-
-    <br>
-
-    <br>
-</body>
-
-<script>
-
-
-
-    //---Aperta F9 pra baixar os localStorages----------------------------------------------------
-
-    function baixar(){
-        var conteudo = "";
-        console.log('bin')
-        for (let i = 0; i < localStorage.length; i++) {
-            const chave = localStorage.key(i);
-            const valor = localStorage.getItem(chave);
-
-            if (chave.includes('barra_favoritos_')) {
-                conteudo += `localStorage.setItem('${chave}','${valor}');`
-            }
-            console.log(conteudo)
-        } 
-        const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "localStorages.txt";
-        a.click();
-        URL.revokeObjectURL(url);
-    }
+  <center>
+    <div class="top-bar">
+      <input type="text" id="linkInput" placeholder="https://exemplo.com"><br><br>
+      <input type="text" id="nameInput" placeholder="Nome do site"><br><br>
+      <button onclick="adicionarFavorito()">+</button>
+    </div>
+  
+    <div style="margin-bottom: 10px;">
+      <button onclick="exportarFavoritos()">Exportar</button>
+      <label style="cursor: pointer;">
+        <span style="background-color: #1abc9c; padding: 6px 12px; border-radius: 5px;">Importar</span>
+        <input type="file" accept=".json" onchange="importarFavoritos(event)" style="display: none;">
+      </label>
+    </div>
     
    
-    //-------------------------------------------------------
+    <div class="menu" id="menu"></div>
+   
+  </center>
 
-
-
-
-    var sites = []
-    var nomes_sites = []
-    var id_sites = []
-
-
-    //carrega os favoritos
-    for (let index = 0; index < 1000; index++) {
-        if (localStorage.getItem('barra_favoritos_link_' + index)) {
-            sites.push(localStorage.getItem('barra_favoritos_link_' + index))
-            nomes_sites.push(localStorage.getItem('barra_favoritos_nome_' + index))
-            id_sites.push(localStorage.getItem('barra_favoritos_id_sites_' + index))
-        }
+  
+  <script>
+    const menu = document.getElementById('menu');
+  
+    function salvarFavoritos(lista) {
+      localStorage.setItem('favoritos', JSON.stringify(lista));
     }
-
-
-
-
-    //constroi a tabela
-
-    var ct = 0;
-    var str = '<table>'
-    sites.forEach(e => {
-        str += `
-            <tr>
-                <td>
-                    <font style='color:red' onclick="apagar(${id_sites[ct]})">x</font>
-                </td>
-                <td>
-                   &nbsp;&nbsp;&nbsp;
-                </td> 
-                <td>
-                    <a href="${e}">
-                    <img src="https://www.google.com/s2/favicons?sz=25&domain=${e}" alt=""> 
-                 
-                ${reduzirCaracteres(nomes_sites[ct])}
-                    </a> 
-                </td>
-            </tr>
+  
+    function carregarFavoritos() {
+      const dados = localStorage.getItem('favoritos');
+      return dados ? JSON.parse(dados) : [];
+    }
+  
+    function renderizarFavoritos() {
+      menu.innerHTML = '';
+      const favoritos = carregarFavoritos();
+  
+      favoritos.forEach((fav, index) => {
+        const dominio = new URL(fav.link).hostname;
+        const favicon = `https://www.google.com/s2/favicons?domain=${dominio}`;
+  
+        const item = document.createElement('div');
+        item.className = 'menu-item';
+        item.innerHTML = `
+          <button class="delete-btn" onclick="deletarFavorito(event, ${index})">×</button>
+          <img src="${favicon}" alt="Ícone">
+          <span>${fav.nome}</span>
         `;
-        ct++;
-    });
-    str += "</table>"
-    document.body.innerHTML += str
-
-    //-------------------------------------------------------------------
-
-
-    document.getElementById('Salvar').addEventListener('click', () => {
-        
-        if (document.getElementById('link').value !== '') {
-            if (document.getElementById('nome').value !== '') {
-                for (let index = 0; index < 1000; index++) {
-                    if (!localStorage.getItem('barra_favoritos_link_' + index)) {
-                        localStorage.setItem('barra_favoritos_link_' + index, document.getElementById('link').value)
-                        localStorage.setItem('barra_favoritos_nome_' + index, document.getElementById('nome').value)
-                        localStorage.setItem('barra_favoritos_id_sites_' + index, index)
-                        break;
-                    }
-                }
-            }
-        }
-        window.location.reload();
-    })
-
-
-    function apagar(index) {
-        localStorage.removeItem('barra_favoritos_link_' + index)
-        localStorage.removeItem('barra_favoritos_nome_' + index)
-        localStorage.removeItem('barra_favoritos_id_sites_' + index)
-        window.location.reload();
+        item.onclick = () => window.open(fav.link, '_blank');
+        menu.appendChild(item);
+      });
     }
-
-
-    function reduzirCaracteres(palavra, maxCaracteres = 18) {
-        if (palavra[maxCaracteres]) {
-            var final = ''
-            for (let index = 0; index < (maxCaracteres - 1); index++) {
-                final += palavra[index]
-            }
-            final += '...'
-            return final;
-        }
-        else {
-            return palavra;
-        }
+  
+    function adicionarFavorito() {
+      const link = document.getElementById('linkInput').value.trim();
+      const nome = document.getElementById('nameInput').value.trim();
+  
+      if (!link || !nome) {
+        alert('Preencha os dois campos.');
+        return;
+      }
+  
+      const favoritos = carregarFavoritos();
+      favoritos.push({ link, nome });
+      salvarFavoritos(favoritos);
+  
+      document.getElementById('linkInput').value = '';
+      document.getElementById('nameInput').value = '';
+  
+      renderizarFavoritos();
     }
+  
+    function deletarFavorito(event, index) {
+      event.stopPropagation();
+      const favoritos = carregarFavoritos();
+      favoritos.splice(index, 1);
+      salvarFavoritos(favoritos);
+      renderizarFavoritos();
+    }
+  
+    function exportarFavoritos() {
+      const favoritos = carregarFavoritos();
+      const blob = new Blob([JSON.stringify(favoritos, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+  
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'favoritos.json';
+      a.click();
+  
+      URL.revokeObjectURL(url);
+    }
+  
+    function importarFavoritos(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+  
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const dados = JSON.parse(e.target.result);
+          if (Array.isArray(dados)) {
+            salvarFavoritos(dados);
+            renderizarFavoritos();
+          } else {
+            alert('Arquivo inválido!');
+          }
+        } catch (e) {
+          alert('Erro ao importar favoritos!');
+        }
+      };
+      reader.readAsText(file);
+    }
+  
+    renderizarFavoritos();
+  </script>
 
 
-</script>
 
+</body>
 
 </html>
