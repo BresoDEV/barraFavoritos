@@ -185,7 +185,7 @@
           <img src="${favicon}" alt="Ícone">
           <span>${fav.nome}</span>
         `;
-        item.onclick = () => window.open(fav.link, '_blank');
+        item.onclick = () => window.open(fav.link, '_self');
         menu.appendChild(item);
       });
     }
